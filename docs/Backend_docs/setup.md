@@ -7,16 +7,6 @@
 
 > A step-by-step guide to setting up and running the Government ERP Backend API on your local machine.
 
----
-
-## 📋 Prerequisites
-
-Ensure you have the following installed on your system before starting:
-- [Node.js](https://nodejs.org/) (v14 or higher)
-- [npm](https://www.npmjs.com/) or `yarn`
-- Database instance (e.g., PostgreSQL, MySQL)
-
----
 
 ## 🚀 Installation Steps
 
