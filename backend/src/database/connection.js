@@ -1,11 +1,10 @@
-import pkg from '@prisma/client';
-const { PrismaClient } = pkg;
+import { PrismaClient } from '@prisma/client';
 
 export const connectDB = () => {
   try {
-    const Prisma = new PrismaClient();
+    const prisma = new PrismaClient();
     console.log('Database connected');
-    return Prisma;
+    return prisma;
   } catch (error) {
     console.error('Database connection error:', error);
     process.exit(1);

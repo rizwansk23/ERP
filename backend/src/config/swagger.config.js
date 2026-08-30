@@ -1,4 +1,6 @@
 import swaggerJsdoc from 'swagger-jsdoc';
+import config from './app.config.js';
+
 
 const options = {
   definition: {
@@ -10,12 +12,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:5000',
+        url: `http://localhost:${config.port}`,
         description: 'Development server',
       },
     ],
   },
-  apis: ['./src/modules/**/*.routes.js'], // Path to the API docs
+  apis: ['./src/modules/**/*.swagger.js'], // Path to the API docs
 };
 
 export const specs = swaggerJsdoc(options);

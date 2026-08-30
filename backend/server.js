@@ -1,12 +1,8 @@
+import 'dotenv/config';
 import app from './src/app.js';
-import { connectDB } from './src/database/connection.js';
 import config from './src/config/app.config.js';
 
-const start = async () => {
-    // await connectDB();
-    app.listen(config.port, () => {
-        console.log(`Server running on port ${config.port}`);
-    });
-};
-
-start();
+app.listen(config.port, () => {
+  console.log(`Server running on port 'http://localhost:${config.port}'`);
+  console.log(`api documentation on port 'http://localhost:${config.port}/docs'`);
+});
