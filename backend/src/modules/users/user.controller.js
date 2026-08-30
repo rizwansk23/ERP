@@ -1,4 +1,4 @@
-import { asyncHandler } from '../../middleware/async.middleware.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
 import * as service from './user.service.js';
 
 export const getOne = asyncHandler(async (req, res) => {
