@@ -1,0 +1,15 @@
+// ============================================================================
+// 3. LOGIN_SESSIONS
+// ============================================================================
+
+model LoginSession {
+  id         Int       @id @default(autoincrement())
+  userId     Int       @map("user_id")
+  user       User      @relation(fields: [userId], references: [id])
+  loginAt    DateTime  @map("login_at")
+  logoutAt   DateTime? @map("logout_at")
+  deviceInfo String?   @map("device_info")
+  isActive   Boolean   @default(true) @map("is_active")
+
+  @@map("login_sessions")
+}

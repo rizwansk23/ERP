@@ -1,0 +1,16 @@
+// ============================================================================
+// 8. BUSINESS_SETTINGS
+// Typically used as a single-row settings table (no soft-delete / audit
+// columns in the design doc, so none are added here).
+// ============================================================================
+
+model BusinessSetting {
+  id            Int     @id @default(autoincrement())
+  businessName  String  @map("business_name")
+  ownerName     String  @map("owner_name")
+  businessLogo  String? @map("business_logo")
+  businessPhone String? @map("business_phone")
+  appLockKey    String? @map("app_lock_key")
+
+  @@map("business_settings")
+}

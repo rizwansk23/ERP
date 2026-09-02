@@ -1,0 +1,19 @@
+// ============================================================================
+// Base Prisma configuration
+// This is the only file that needs the generator/datasource blocks.
+// All other .prisma files in this folder are automatically merged with this
+// one at build time (requires the "prismaSchemaFolder" preview feature,
+// Prisma 5.15+ / stable in Prisma 6+).
+// ============================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  // SQLite chosen to match the offline, single-file DB used by the design doc.
+  // Swap provider/url if you move to Postgres/MySQL later.
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}

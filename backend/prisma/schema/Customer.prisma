@@ -1,0 +1,20 @@
+// ============================================================================
+// 4. CUSTOMERS
+// ============================================================================
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  surname   String
+  phone     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  deletedAt   DateTime? @map("deleted_at")
+  deletedById Int?      @map("deleted_by")
+  deletedBy   User?     @relation("CustomerDeletedByUser", fields: [deletedById], references: [id])
+
+  works Work[]
+
+  @@map("customers")
+}

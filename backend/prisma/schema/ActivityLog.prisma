@@ -1,0 +1,23 @@
+// ============================================================================
+// 2. ACTIVITY_LOGS
+// Append-only event log — intentionally has no updatedAt.
+// ============================================================================
+
+model ActivityLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  user       User     @relation("ActivityLogUser", fields: [userId], references: [id])
+  action     String
+  entityType String   @map("entity_type")
+  entityId   Int      @map("entity_id")
+  details    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  deletedAt   DateTime? @map("deleted_at")
+  deletedById Int?      @map("deleted_by")
+  deletedBy   User?     @relation("ActivityLogDeletedByUser", fields: [deletedById], references: [id])
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("activity_logs")
+}

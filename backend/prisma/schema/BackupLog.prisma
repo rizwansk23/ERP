@@ -1,0 +1,18 @@
+// ============================================================================
+// 9. BACKUP_LOGS
+// backupDate is the single timestamp of record — no separate createdAt.
+// ============================================================================
+
+model BackupLog {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @map("user_id")
+  user           User     @relation(fields: [userId], references: [id])
+  backupFileName String   @map("backup_file_name")
+  filePath       String   @map("file_path")
+  fileSize       Int      @map("file_size")
+  backupDate     DateTime @map("backup_date")
+  notes          String?
+
+  @@index([userId])
+  @@map("backup_logs")
+}
