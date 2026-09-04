@@ -1,19 +1,17 @@
 import Prisma from './src/database/connection.js';
 
 try {
-  const users = await Prisma.user.findMany({
-    select: {
-      id: true,
-      userId: true,
-      name: true,
-      passwordHash: true,
-      role: true,
+  const user = await Prisma.user.create({
+    data: {
+      userId: 'ADMIN001',
+      name: 'Admin User',
+      passwordHash: 'admin123',
+      role: 'ADMIN',
       isActive: true,
-      deletedAt: true,
     },
   });
 
-  console.table(users);
+  console.log('User created successfully:', user);
 } catch (error) {
   console.error(error);
 } finally {

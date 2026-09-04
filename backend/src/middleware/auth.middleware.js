@@ -3,14 +3,14 @@ import jwt from 'jsonwebtoken';
 import Prisma from '../database/connection.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
+import AppError from '../utils/errors.js'
+import {MODULES} from '../enum/modules.js'
+
+
+//it will used for auth error
 const createAuthError = (message, statusCode) => {
-  const error = new Error(message);
 
-  error.statusCode = statusCode;
-  error.isOperational = true;
-  error.module = 'AUTH';
-
-  return error;
+  throw new AppError(message ,statusCode,MODULES.AUTH)
 };
 
 export const protect = asyncHandler(async (req, res, next) => {

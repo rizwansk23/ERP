@@ -1,17 +1,14 @@
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import * as service from './auth.service.js';
+import AppError from '../../utils/errors.js'
+import {MODULES} from '../../enum/modules.js'
 
 export const login = asyncHandler(async (req, res) => {
   const { userId, password } = req.body;
 
   if (!userId || !password) {
-    const error = new Error('User ID and password are required');
 
-    error.statusCode = 400;
-    error.isOperational = true;
-    error.module = 'AUTH';
-
-    throw error;
+    throw new AppError('User ID and password are required',400,MODULES.AUTH)
   }
 
   const deviceInfo = req.headers['user-agent'] || null;
