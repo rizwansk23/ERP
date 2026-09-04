@@ -21,10 +21,10 @@
     "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.19.3",
     "nodemon": "^3.0.2",
     "prettier": "^3.9.6",
-    "prisma": "^5.22.0",
+    "prisma": "^6.19.3",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1"
   }
