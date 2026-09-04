@@ -12,14 +12,13 @@
     "db": "prisma db push",
     "seed": "prisma db seed"
   },
-  
   "prisma": {
     "schema": "prisma/schema"
   },
-  
   "dependencies": {
     "dotenv": "^17.4.2",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
     "@prisma/client": "^5.22.0",
