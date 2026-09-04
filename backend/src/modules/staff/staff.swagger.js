@@ -1,69 +1,207 @@
 /**
  * @swagger
- * components:
- *   schemas:
- *     Staff:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *         name:
- *           type: string
- *         email:
- *           type: string
- *           format: email
+ * tags:
+ *   - name: Staff Management
+ *     description: Admin APIs for managing staff members
  */
 
- /**
-  * @swagger
-  * /api/staff/{id}:
-  *   get:
-  *     summary: Get staff by ID
-  *     parameters:
-  *       - in: path
-  *         name: id
-  *         required: true
-  *         schema:
-  *           type: string
-  *         description: The staff ID
-  *     responses:
-  *       200:
-  *         description: Successfully retrieved staff
-  *         content:
-  *           application/json:
-  *             schema:
-  *               $ref: '#/components/schemas/Staff'
+/**
+ * @swagger
+ * /api/staff:
+ *   post:
+ *     summary: Create a new staff member
+ *     tags: [Staff Management]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Karan Yadav
+ *                 description: Staff member's name
+ *               userId:
+ *                 type: string
+ *                 example: STF-2808
+ *                 description: Optional custom Staff ID. If omitted, it will be generated automatically.
+ *               password:
+ *                 type: string
+ *                 example: karan
+ *                 description: Optional custom password. If omitted, it will be generated automatically.
+ *     responses:
+ *       201:
+ *         description: Staff created successfully
+ *       400:
+ *         description: Staff name is required or invalid input
+ *       401:
+ *         description: Authentication required
+ *       403:
+ *         description: Only ADMIN can access this endpoint
+ *       409:
+ *         description: Staff ID already exists
+ */
+
+/**
+ * @swagger
+ * /api/staff:
+ *   get:
+ *     summary: Get all staff members
+ *     tags: [Staff Management]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Staff fetched successfully
+ *       401:
+ *         description: Authentication required
+ *       403:
+ *         description: Only ADMIN can access this endpoint
+ */
+
+/**
+ * @swagger
+ * /api/staff/{id}:
+ *   get:
+ *     summary: Get a single staff member
+ *     tags: [Staff Management]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Database ID of the staff member
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Staff fetched successfully
+ *       400:
+ *         description: Invalid staff ID
+ *       401:
+ *         description: Authentication required
+ *       403:
+ *         description: Only ADMIN can access this endpoint
  *       404:
  *         description: Staff not found
  */
 
- /**
-  * @swagger
-  * /api/staff:
-  *   post:
-  *     summary: Create a new staff
-  *     requestBody:
-  *       required: true
-  *       content:
-  *         application/json:
-  *           schema:
-  *             type: object
+/**
+ * @swagger
+ * /api/staff/{id}/credentials:
+ *   get:
+ *     summary: View staff login credentials
+ *     tags: [Staff Management]
+ *     description: Admin can view the Staff ID and password of a staff member.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Database ID of the staff member
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Staff credentials fetched successfully
+ *       400:
+ *         description: Invalid staff ID
+ *       401:
+ *         description: Authentication required
+ *       403:
+ *         description: Only ADMIN can access this endpoint
+ *       404:
+ *         description: Staff not found
+ */
+
+/**
+ * @swagger
+ * /api/staff/{id}:
+ *   patch:
+ *     summary: Update staff name or password
+ *     tags: [Staff Management]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Database ID of the staff member
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
  *             properties:
  *               name:
  *                 type: string
- *               email:
- *                 type: string
- *                 format: email
+ *                 example: Updated Staff Name
  *               password:
  *                 type: string
- *                 minLength: 6
+ *                 example: newpassword
  *     responses:
- *       201:
- *         description: Staff created successfully
- *         content:
- *           application/json:
-  *             schema:
-  *               $ref: '#/components/schemas/Staff'
+ *       200:
+ *         description: Staff updated successfully
  *       400:
- *         description: Invalid input
+ *         description: Invalid update data
+ *       401:
+ *         description: Authentication required
+ *       403:
+ *         description: Only ADMIN can access this endpoint
+ *       404:
+ *         description: Staff not found
+ */
+
+/**
+ * @swagger
+ * /api/staff/{id}/status:
+ *   patch:
+ *     summary: Activate or deactivate staff
+ *     tags: [Staff Management]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Database ID of the staff member
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - isActive
+ *             properties:
+ *               isActive:
+ *                 type: boolean
+ *                 example: false
+ *     responses:
+ *       200:
+ *         description: Staff status updated successfully
+ *       400:
+ *         description: isActive must be true or false
+ *       401:
+ *         description: Authentication required
+ *       403:
+ *         description: Only ADMIN can access this endpoint
+ *       404:
+ *         description: Staff not found
  */

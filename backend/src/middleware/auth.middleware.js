@@ -10,7 +10,7 @@ import {MODULES} from '../enum/modules.js'
 //it will used for auth error
 const createAuthError = (message, statusCode) => {
 
-  throw new AppError(message ,statusCode,MODULES.AUTH)
+  return  new AppError(message ,statusCode,MODULES.AUTH)
 };
 
 export const protect = asyncHandler(async (req, res, next) => {
@@ -52,3 +52,29 @@ export const protect = asyncHandler(async (req, res, next) => {
 
   next();
 });
+
+export const authorize = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return next(
+        new AppError(
+          'Authentication required',
+          401,
+          MODULES.AUTH
+        )
+      );
+    }
+
+    if (!allowedRoles.includes(req.user.role)) {
+      return next(
+        new AppError(
+          'You are not authorized to access this resource',
+          403,
+          MODULES.AUTH
+        )
+      );
+    }
+
+    next();
+  };
+};
