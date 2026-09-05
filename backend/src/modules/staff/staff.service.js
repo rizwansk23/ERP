@@ -4,7 +4,7 @@ import {
   generateStaffId,
   generatePassword,
 } from '../../utils/staff.utils.js';
-
+import {addActivityLog} from '../activity-logs/activity.service.js';
 import {
   createStaff,
   findAllStaff,
@@ -21,7 +21,7 @@ const createStaffError = (message, statusCode) => {
 };
 
 
-export const addStaff = async ({ name, userId, password }) => {
+export const addStaff = async ({ name, userId, password },createdById) => {
   if (!name || !name.trim()) {
     createStaffError('Staff name is required', 400);
   }
@@ -55,6 +55,14 @@ export const addStaff = async ({ name, userId, password }) => {
     passwordHash: finalPassword,
     role: 'STAFF',
     isActive: true,
+  });
+
+  await addActivityLog({
+    userId:createdById,
+    action:'STAFF_CREATED',
+    entityType:'STAFF',
+    entityId:staff.id,
+    details:`Staff ${staff.name} was created`
   });
 
   return {
@@ -92,7 +100,7 @@ export const getStaffCredentials = async (id) => {
   };
 };
 
-export const editStaff = async (id, data) => {
+export const editStaff = async (id, data,updatedById) => {
   const staff = await findStaffById(Number(id));
 
   if (!staff) {
@@ -121,10 +129,20 @@ export const editStaff = async (id, data) => {
     createStaffError('No valid fields provided for update', 400);
   }
 
-  return updateStaff(Number(id), updateData);
+   const updatedStaff = await updateStaff(Number(id), updateData);
+
+  await addActivityLog({
+    userId: updatedById,
+    action: 'STAFF_UPDATED',
+    entityType: 'STAFF',
+    entityId: Number(id),
+    details: `Staff ${updatedStaff.name} was updated`,
+  });
+
+  return updatedStaff;
 };
 
-export const changeStaffStatus = async (id, isActive) => {
+export const changeStaffStatus = async (id, isActive,updatedById) => {
   const staff = await findStaffById(Number(id));
 
   if (!staff) {
@@ -135,7 +153,22 @@ export const changeStaffStatus = async (id, isActive) => {
     createStaffError('isActive must be true or false', 400);
   }
 
-  return updateStaff(Number(id), { isActive });
+  const updatedStaff = await updateStaff(
+    Number(id),
+    { isActive }
+  );
+
+  await addActivityLog({
+    userId: updatedById,
+    action: 'STAFF_STATUS_UPDATED',
+    entityType: 'STAFF',
+    entityId: Number(id),
+    details: `Staff status changed to ${
+      isActive ? 'ACTIVE' : 'INACTIVE'
+    }`,
+  });
+
+  return updatedStaff;
 };
 
 export const changeStaffPassword = async ({
@@ -179,6 +212,15 @@ export const changeStaffPassword = async ({
     id,
     newPassword.trim()
   );
+
+  await addActivityLog({
+    userId: id,
+    action: 'PASSWORD_CHANGED',
+    entityType: 'AUTH',
+    entityId: id,
+    details: 'Staff password was changed',
+  });
+
 
   return updatedStaff;
 };

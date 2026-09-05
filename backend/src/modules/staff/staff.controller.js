@@ -38,7 +38,9 @@ export const createStaff = asyncHandler(async (req, res) => {
     name,
     userId,
     password,
-  });
+  },
+  req.user.id
+);
 
   res.status(201).json({
     success: true,
@@ -100,7 +102,9 @@ export const updateStaff = asyncHandler(async (req, res) => {
   const staff = await editStaff(id, {
     name,
     password,
-  });
+  },
+  req.user.id
+);
 
   res.status(200).json({
     success: true,
@@ -119,7 +123,8 @@ export const updateStaffStatus = asyncHandler(async (req, res) => {
     throw staffError('isActive must be true or false', 400);
   }
 
-  const staff = await changeStaffStatus(id, isActive);
+  const staff = await changeStaffStatus(id, isActive,
+  req.user.id);
 
   res.status(200).json({
     success: true,

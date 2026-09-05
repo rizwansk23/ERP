@@ -32,12 +32,14 @@ export const addActivityLog = async ({
   if (!entityType || !entityType.trim()) {
     throw createActivityError('Entity type is required', 400);
   }
-
+if (!Number.isInteger(Number(entityId))) {
+  throw createActivityError('Entity ID is required', 400);
+}
   return createActivityLog({
     userId,
     action: action.trim(),
     entityType: entityType.trim(),
-    entityId: entityId ?? null,
+    entityId: entityId,
     details: details?.trim() || null,
   });
 };
