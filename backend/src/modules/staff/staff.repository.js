@@ -95,3 +95,19 @@ export const updateStaff = (id, data) => {
     },
   });
 };
+
+export const updateStaffPassword = (id, passwordHash) => {
+  return Prisma.user.update({
+    where: { id },
+    data: {
+      passwordHash,
+      updatedAt: new Date(),
+    },
+    select: {
+      id: true,
+      userId: true,
+      name: true,
+      updatedAt: true,
+    },
+  });
+};

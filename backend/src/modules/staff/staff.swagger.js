@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   - name: Staff Management
- *     description: Admin APIs for managing staff members
+ *     description: Admin APIs for managing staff members also Staff APIs
  */
 
 /**
@@ -202,6 +202,70 @@
  *         description: Authentication required
  *       403:
  *         description: Only ADMIN can access this endpoint
+ *       404:
+ *         description: Staff not found
+ */
+
+/**
+ * @swagger
+ * /api/staff/profile:
+ *   get:
+ *     summary: Get current staff profile
+ *     description: Get the profile of the currently logged-in staff member
+ *     tags: [Staff Management]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Staff profile fetched successfully
+ *       401:
+ *         description: Authentication token is required
+ *       403:
+ *         description: User account is inactive
+ *       404:
+ *         description: Staff profile not found
+ */
+
+/**
+ * @swagger
+ * /api/staff/change-Password:
+ *   patch:
+ *     summary: change staff password from staff side 
+ *     description: Staff apna password change kar sakta hai esliye ye api hai
+ *     tags: [Staff Management]
+*     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               -currentPassword
+ *               -newPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 format: password
+ *                 description: Current password of the logged-in staff member
+ *                 example: oldPassword
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 6
+ *                 description: New password for the staff member
+ *                 example: newpassword123
+ *              
+ *     responses:
+ *       200:
+ *         description: Password changed successfully
+ *       400:
+ *         description: Current password or new password is missing or invalid
+ *       401:
+ *         description: Authentication required or current password is incorrect
+ *       403:
+ *         description: User account is inactive
  *       404:
  *         description: Staff not found
  */

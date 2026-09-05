@@ -11,7 +11,8 @@ import {
   findStaffById,
   findStaffCredentialsById,
   updateStaff,
-findStaffByUserId,
+  findStaffByUserId,
+  updateStaffPassword
 
 } from './staff.repository.js';
 
@@ -135,4 +136,49 @@ export const changeStaffStatus = async (id, isActive) => {
   }
 
   return updateStaff(Number(id), { isActive });
+};
+
+export const changeStaffPassword = async ({
+  id,
+  currentPassword,
+  newPassword,
+}) => {
+  if (!currentPassword || !currentPassword.trim()) {
+    createStaffError('Current password is required', 400);
+  }
+
+  if (!newPassword || !newPassword.trim()) {
+    createStaffError('New password is required', 400);
+  }
+
+  if (newPassword.trim().length < 6) {
+    createStaffError(
+      'New password must be at least 6 characters',
+      400
+    );
+  }
+
+  if (currentPassword.trim() === newPassword.trim()) {
+    createStaffError(
+      'New password must be different from current password',
+      400
+    );
+  }
+
+  const staff = await findStaffCredentialsById(id);
+
+  if (!staff) {
+    createStaffError('Staff not found', 404);
+  }
+
+  if (staff.passwordHash !== currentPassword.trim()) {
+    createStaffError('Current password is incorrect', 401);
+  }
+
+  const updatedStaff = await updateStaffPassword(
+    id,
+    newPassword.trim()
+  );
+
+  return updatedStaff;
 };

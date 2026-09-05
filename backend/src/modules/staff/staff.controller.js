@@ -9,6 +9,7 @@ import {
   getStaffCredentials,
   editStaff,
   changeStaffStatus,
+  changeStaffPassword 
 } from './staff.service.js';
 
 const staffError = (message, statusCode = 400) => {
@@ -124,5 +125,33 @@ export const updateStaffStatus = asyncHandler(async (req, res) => {
     success: true,
     message: 'Staff status updated successfully',
     data: staff,
+  });
+});
+
+export const getStaffProfile = asyncHandler(async(req,res)=>{
+  const id = req.user.id
+  const staff = await getStaffById(id);
+
+  res.status(200).json({
+    success: true,
+    message: 'Staff fetched successfully',
+    data: staff,
+  });
+})
+
+// PATCH /api/staff/changePassword
+export const changePassword = asyncHandler(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  const updatedStaff = await changeStaffPassword({
+    id: req.user.id,
+    currentPassword,
+    newPassword,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Password changed successfully',
+    data: updatedStaff,
   });
 });
