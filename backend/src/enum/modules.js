@@ -1,4 +1,4 @@
-export const MODULES = {
+export  const MODULES = {
   AUTH: 'AUTH',
   USER: 'USER',
   STAFF: 'STAFF',

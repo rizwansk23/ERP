@@ -15,6 +15,22 @@
  *           type: string
  */
 
+/**
+ * @swagger
+ * /api/payments:
+ *   get:
+ *     summary: Get all payments
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved payments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Payment'
+ */     
+
  /**
   * @swagger
   * /api/payments/{id}:
