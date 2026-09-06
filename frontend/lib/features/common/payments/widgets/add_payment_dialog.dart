@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../../core/widgets/erp_text_field.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../models/payment_model.dart';
 
@@ -106,7 +107,7 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Add Payment', style: textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                  Text('Customer Details', style: textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
@@ -125,15 +126,6 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('CUSTOMER', style: textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold, color: AppColors.slate)),
-                        Text('Change customer', style: textTheme.bodyMedium?.copyWith(color: AppColors.navy2, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    
                     _buildDetailRow('Customer Name', Text(p.fullName, style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)), textTheme),
                     _buildDetailRow(
                       'Argument Number', 
@@ -151,37 +143,21 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
                     _buildDetailRow('Already Paid', Text('₹${p.advance.toInt()}', style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)), textTheme),
                     _buildDetailRow('Pending Balance', Text('₹${p.pendingBalance.toInt()}', style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold, color: isPendingZero ? AppColors.green : AppColors.red)), textTheme, isLast: true),
                     
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
+                    const Divider(color: AppColors.line, height: 1), // Ye ek patli line banayega
+                    const SizedBox(height: 16),
                     
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start, // Align to top for error messages
                       children: [
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('NEW PAYMENT AMOUNT (₹)', style: textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold, color: AppColors.slate)),
-                              const SizedBox(height: 6),
-                              SizedBox(
-                                // errorText ki wajah se height auto adjust hone di hai
-                                child: TextField(
-                                  controller: _amountController,
-                                  style: textTheme.bodyMedium,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    hintText: '0',
-                                    errorText: _amountErrorText, // Validation error yahan dikhega
-                                    filled: true,
-                                    fillColor: AppColors.surface,
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                                    enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.line), borderRadius: BorderRadius.circular(6)),
-                                    focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.navy2, width: 2), borderRadius: BorderRadius.circular(6)),
-                                    errorBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.red), borderRadius: BorderRadius.circular(6)),
-                                    focusedErrorBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.red, width: 2), borderRadius: BorderRadius.circular(6)),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          // WIDGET USE KIYA HAI YAHAN
+                          child: ErpTextField(
+                            label: 'NEW PAYMENT AMOUNT (₹)',
+                            controller: _amountController,
+                            keyboardType: TextInputType.number,
+                            hintText: '0',
+                            errorText: _amountErrorText, // Error pass kiya
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -212,7 +188,9 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 16),
+                    
                     Row(
                       children: [
                         Expanded(
@@ -269,7 +247,9 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
                       ],
                     ),
                     
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 20),
+                    const Divider(color: AppColors.line, height: 1), // Ye ek patli line banayega
+                    const SizedBox(height: 16),
                     
                     // BOTTOM BUTTONS: Cancel & Save
                     Row(
