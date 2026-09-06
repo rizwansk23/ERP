@@ -13,10 +13,9 @@ export const getAllPayments = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, data: payments });
 });
 
-
-
 export const getOnePayment = asyncHandler(async (req, res) => {
-  const payment = await service.getOnePayment(req.params.id);
+  const { work_id } = req.params;
+  const payment = await service.getOnePayment(parseInt(work_id));
 
   if (!payment) {
     throw new ApiError(`Payment with ID ${re.params.id} not found`, 404, MODULES.PAYMENT);
