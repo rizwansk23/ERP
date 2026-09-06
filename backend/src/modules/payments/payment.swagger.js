@@ -61,6 +61,13 @@
  * /api/payments:
  *   post:
  *     summary: Create a new payment
+ *     parameters:
+ *       - in: path
+ *         name: work_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The payment ID
  *     requestBody:
  *       required: true
  *       content:
@@ -68,10 +75,8 @@
  *           schema:
  *             type: object
  *             properties:
- *               amount:
+ *               paid:
  *                 type: number
- *               currency:
- *                 type: string
  *               status:
  *                 type: string
  *     responses:

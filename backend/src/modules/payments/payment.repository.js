@@ -29,10 +29,10 @@ export const findById = async (id) => {
         },
         select: {
           paymentStatus: true,
-          paid:true,
-          paymentMethod:true,
+          paid: true,
+          paymentMethod: true,
           remaining: true,
-          createdAt:true,
+          createdAt: true,
         },
       },
     },
@@ -66,15 +66,20 @@ export const findWorks = async () => {
   });
 };
 
-export const create = async (data) => {
-  await Prisma.payment.create({
+export const AddPayment = async (workId, amount, paymentMethod, remaining, paymentStatus) => {
+  return await Prisma.payment.create({
     data: {
-      id: data.id,
-      amount: data.amount,
-      status: data.status,
-      user_id: data.user_id,
-      created_at: data.created_at,
-      updated_at: data.updated_at,
+      workId: workId,
+      charge: 0,
+      paid: amount,
+      discountAmount: 0,
+      finalAmount: 0,
+      remaining: remaining,
+      paymentMethod: paymentMethod,
+      paymentStatus: paymentStatus,
+      createdById: 1,     // add the staff/admin reference here
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
   });
 };

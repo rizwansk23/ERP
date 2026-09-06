@@ -1,6 +1,6 @@
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import ApiError from '../../utils/errors.js';
-import {MODULES} from '../../enum/modules.js';
+import { MODULES } from '../../enum/modules.js';
 import * as service from './payment.service.js';
 
 export const getAllPayments = asyncHandler(async (req, res) => {
@@ -22,10 +22,18 @@ export const getOnePayment = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json({ success: true, data: payment });
-
 });
 
 export const createPayment = asyncHandler(async (req, res) => {
-  const data = await service.create(req.body);
-  res.status(201).json({ success: true, data });
+  const { work_id } = req.params;
+  const { amount, paymentMethod, finalAmount } = req.body;
+
+  const payment = await service.createPayment(
+    parseInt(work_id),
+    amount,
+    paymentMethod,
+    finalAmount,
+  );
+
+  res.status(201).json({ success: true, data: payment });
 });
