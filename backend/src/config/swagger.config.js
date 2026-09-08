@@ -10,11 +10,21 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for Government ERP system',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
     servers: [
       {
         url: `http://localhost:${config.port}`,
         description: 'Development server',
       },
+
     ],
   },
   apis: ['./src/modules/**/*.swagger.js'], // Path to the API docs

@@ -2,8 +2,8 @@
 import 'package:go_router/go_router.dart';
 
 // Shells
-import '../core/layout/app_shell.dart';
-import '../features/staff/shell/staff_shell.dart';
+import '../core/layout/admin/app_shell.dart';
+import '../core/layout/staff/staff_shell.dart';
 
 // Authentication
 import '../features/login/screens/admin_login_screen.dart';
@@ -11,17 +11,17 @@ import '../features/login/screens/admin_login_screen.dart';
 // Common Shared Screens
 import '../features/common/payments/screens/payment_dashboard_screen.dart';
 import '../features/common/profile/screens/profile_screen.dart';
+import '../features/common/customer_intake/screens/customer_intake_screen.dart';
 
 // Admin Specific Screens
 import '../features/admin/dashboard/screens/dashboard_screen.dart';
-import '../features/admin/customer_intake/screens/customer_intake_screen.dart';
 import '../features/admin/works/screens/works_dashboard_screen.dart';
 import '../features/admin/staff_management/screens/staff_management_screen.dart';
 import '../features/admin/activity/screens/activity_log_screen.dart';
 import '../features/admin/form_management/screens/form_management_screen.dart';
 
 // Staff Specific Screens
-import '../features/staff/customer_intake/screens/staff_customer_intake_screen.dart';
+// import '../features/staff/customer_intake/screens/staff_customer_intake_screen.dart';
 import '../features/staff/works/screens/staff_works_dashboard_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNav = GlobalKey<NavigatorState>();
@@ -58,7 +58,7 @@ final appRouter = GoRouter(
       navigatorKey: _staffShellNav,
       builder: (context, state, child) => StaffShell(child: child),
       routes: [
-        GoRoute(path: '/staff/intake', builder: (context, state) => const StaffCustomerIntakeScreen()),
+        GoRoute(path: '/staff/intake', builder: (context, state) => const CustomerIntakeScreen()),
         GoRoute(path: '/staff/payments', builder: (context, state) => const PaymentDashboardScreen()), // Points to Shared Payment Screen
         GoRoute(path: '/staff/works', builder: (context, state) => const StaffWorksDashboardScreen()),
       ],

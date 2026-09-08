@@ -1,8 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../theme/app_colors.dart';
+import '../../theme/app_theme.dart';
 
 class StaffShell extends StatelessWidget {
   final Widget child;
