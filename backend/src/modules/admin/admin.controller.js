@@ -1,5 +1,5 @@
 import { asyncHandler } from '../../utils/asyncHandler.js';
-import * as service from './user.service.js';
+import * as service from './admin.service.js';
 
 export const getOne = asyncHandler(async (req, res) => {
     const data = await service.getOne(req.params.id);

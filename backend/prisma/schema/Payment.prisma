@@ -13,20 +13,15 @@
 // ============================================================================
 
 model Payment {
-  id     Int  @id @default(autoincrement())
+  id     String  @id 
   workId Int  @map("work_id")
   work   Work @relation(fields: [workId], references: [id])
 
-  charge         Float
-  discountAmount Float @default(0) @map("discount_amount")
   paid           Float @default(0)
-  // Computed at the application layer: charge - discountAmount.
-  finalAmount    Float @default(0) @map("final_amount")
   // Computed at the application layer: charge - discountAmount - paid.
   remaining      Float @default(0)
 
   paymentMethod String  @map("payment_method")
-  reference     String?
   paymentStatus String? @map("payment_status")
   receiptNumber String? @map("receipt_number")
 
