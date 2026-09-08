@@ -1,8 +1,18 @@
 import express from 'express';
-const router = express.Router();
 import * as controller from './payment.controller.js';
+import {
+  validateCreatePayment,
+  validatePaymentListQuery,
+  validateWorkIdParam,
+} from './payment.validation.js';
 
-router.route('/:work_id').post(controller.createPayment).get(controller.getOnePayment);
-router.get('/', controller.getAllPayments);
+const router = express.Router();
+
+router.get('/', validatePaymentListQuery, controller.getAllPayments);
+
+router
+  .route('/:work_id')
+  .get(validateWorkIdParam, controller.getOnePayment)
+  .post(validateWorkIdParam, validateCreatePayment, controller.createPayment);
 
 export default router;
