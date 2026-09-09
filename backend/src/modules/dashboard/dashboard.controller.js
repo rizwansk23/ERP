@@ -1,12 +1,40 @@
 import { asyncHandler } from '../../utils/asyncHandler.js';
-import * as service from './dashboard.service.js';
 
-export const getOne = asyncHandler(async (req, res) => {
-    const data = await service.getOne(req.params.id);
-    res.status(200).json({ success: true, data });
+import { getDashboardSummaryData, getWorksByServiceData, exportDashboardReport } from './dashboard.service.js';
+
+export const getDashboardSummary = asyncHandler(async (req, res) => {
+  const { period = '1M' } = req.query;
+
+  const summary = await getDashboardSummaryData(period);
+
+  res.status(200).json({
+    success: true,
+    message: 'Dashboard summary fetched successfully',
+    data: summary,
+  });
 });
 
-export const create = asyncHandler(async (req, res) => {
-    const data = await service.create(req.body);
-    res.status(201).json({ success: true, data });
+export const getWorksByService = asyncHandler(async (req, res) => {
+  const { period = '1M' } = req.query;
+
+  const data = await getWorksByServiceData(period);
+
+  res.status(200).json({
+    success: true,
+    message: 'Works by service fetched successfully',
+    data,
+  });
+});
+
+export const exportReport = asyncHandler(async (req, res) => {
+  const {
+    period = '1M',
+    format = 'pdf',
+  } = req.query;
+
+  await exportDashboardReport(
+    res,
+    period,
+    format.toLowerCase()
+  );
 });
