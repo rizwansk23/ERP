@@ -4,8 +4,7 @@
 // remaining   = charge - discountAmount - paid
 // NOTE: same computed-column caveat as WORKS.finalAmount — see
 // prisma/schema/README.md "Generated / computed columns".
-// A payment links to exactly one work via workId (the old redundant
-// acknowledgement_number FK was dropped per the design doc's change log).
+// A payment links to exactly one work via workId.
 // NOTE: Prisma's SQLite connector does not support `enum` blocks, so
 // paymentMethod/paymentStatus are plain Strings — see README "Enums on SQLite".
 // Valid values for `paymentMethod`: "CASH" | "ONLINE" | "CHEQUE" | "LOAN"
@@ -17,16 +16,11 @@ model Payment {
   workId Int  @map("work_id")
   work   Work @relation(fields: [workId], references: [id])
 
-  charge         Float
-  discountAmount Float @default(0) @map("discount_amount")
   paid           Float @default(0)
-  // Computed at the application layer: charge - discountAmount.
-  finalAmount    Float @default(0) @map("final_amount")
   // Computed at the application layer: charge - discountAmount - paid.
   remaining      Float @default(0)
 
   paymentMethod String  @map("payment_method")
-  reference     String?
   paymentStatus String? @map("payment_status")
   receiptNumber String? @map("receipt_number")
 

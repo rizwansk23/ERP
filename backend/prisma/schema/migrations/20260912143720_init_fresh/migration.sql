@@ -1,4 +1,11 @@
 -- CreateTable
+CREATE TABLE "ack_counters" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "year" INTEGER NOT NULL,
+    "last_seq" INTEGER NOT NULL DEFAULT 0
+);
+
+-- CreateTable
 CREATE TABLE "activity_logs" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER NOT NULL,
@@ -63,13 +70,9 @@ CREATE TABLE "login_sessions" (
 CREATE TABLE "payments" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "work_id" INTEGER NOT NULL,
-    "charge" REAL NOT NULL,
-    "discount_amount" REAL NOT NULL DEFAULT 0,
     "paid" REAL NOT NULL DEFAULT 0,
-    "final_amount" REAL NOT NULL DEFAULT 0,
     "remaining" REAL NOT NULL DEFAULT 0,
     "payment_method" TEXT NOT NULL,
-    "reference" TEXT,
     "payment_status" TEXT,
     "receipt_number" TEXT,
     "created_by" INTEGER NOT NULL,
@@ -139,6 +142,9 @@ CREATE TABLE "works" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "ack_counters_year_key" ON "ack_counters"("year");
+
+-- CreateIndex
 CREATE INDEX "activity_logs_user_id_idx" ON "activity_logs"("user_id");
 
 -- CreateIndex
@@ -148,7 +154,7 @@ CREATE INDEX "activity_logs_entity_type_entity_id_idx" ON "activity_logs"("entit
 CREATE INDEX "backup_logs_user_id_idx" ON "backup_logs"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "customers_phone_key" ON "customers"("phone");
+CREATE UNIQUE INDEX "customers_name_surname_key" ON "customers"("name", "surname");
 
 -- CreateIndex
 CREATE INDEX "payments_work_id_idx" ON "payments"("work_id");
