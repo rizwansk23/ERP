@@ -1,6 +1,6 @@
 import Prisma from '../../database/connection.js';
 
-export const findAllWork = async ({ page, limit, search }) => {
+export const findAllWorks = async ({ page, limit, search }) => {
   const skip = (page - 1) * limit;
   const where = { deletedAt: null };
 
@@ -21,7 +21,7 @@ export const findAllWork = async ({ page, limit, search }) => {
       skip,
       take: limit,
       select: {
-        id:true,
+        id: true,
         acknowledgementNumber: true,
         status: true,
         service: { select: { name: true } },
@@ -31,6 +31,25 @@ export const findAllWork = async ({ page, limit, search }) => {
   ]);
 
   return { total, rows };
+};
+
+export const findOneWork = async ({ work_id }) => {
+  return Prisma.work.findFirst({
+    where: {
+      id: work_id,
+    },
+    select: {
+      acknowledgementNumber: true,
+      reference: true,
+      createdAt: true,
+      deadline: true,
+      status: true,
+      delivered: true,
+      completed: true,
+      customer: { select: { name: true, surname: true } },
+      service: { select: { name: true } },
+    },
+  });
 };
 
 export const create = async (data) => {

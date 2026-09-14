@@ -18,6 +18,16 @@ export const normalizeWorkStatus = (value) => {
   return upper;
 };
 
+const validateParamsId = (value) => {
+  if (value === undefined || value === null || value === '') return undefined;
+  if (!Number(value)) fail(`Invalid work id  "${value}". Its must be integer.`);
+
+  const id = Number(value);
+  if (id <= 0) fail(`Invalid work id "${value}". It must be a positive integer.`);
+
+  return id;
+};
+
 export const validateWorkListQuery = (req, _res, next) => {
   const query = req.query ?? {};
   let page = query.page === undefined ? 1 : Number(query.page);
@@ -34,11 +44,16 @@ export const validateWorkListQuery = (req, _res, next) => {
     if (search.length > 30) fail('search query must be less than 30 characters long.');
     if (!/^[a-zA-Z]+$/.test(search)) fail('search query must contain only letter & number.');
 
-    if (search.includes(ALLOWED_WORK_STATUSES)){
-        search = search.toUpperCase()
-    }   
+    if (search.includes(ALLOWED_WORK_STATUSES)) {
+      search = search.toUpperCase();
+    }
   }
 
   req.validatedQuery = { page, limit, search };
+  next();
+};
+
+export const validateWorkId = (req, _res, next) => {
+  req.validateWorkId = validateParamsId(req.params.work_id);
   next();
 };

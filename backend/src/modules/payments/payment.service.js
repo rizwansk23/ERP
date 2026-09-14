@@ -1,6 +1,6 @@
 import * as repository from './payment.repository.js';
 import { PAYMENT_METHOD, PAYMENT_STATUS } from '../../enum/payments.js';
-import { formatDate } from '../../utils/helpers.js';
+import { formatDateTime } from '../../utils/helpers.js';
 import AppError from '../../utils/errors.js';
 import { MODULES } from '../../enum/modules.js';
 
@@ -41,7 +41,7 @@ export const getOnePayment = async (id) => {
       Paid: payment.paid,
       Remaining: payment.remaining ?? null,
       Receipt_Number: payment.receiptNumber ?? null,
-      Created_At: formatDate(payment.createdAt),
+      Created_At: formatDateTime(payment.createdAt),
     })),
   };
 };
@@ -182,7 +182,7 @@ export const createPayment = async (workId, amountOrInput, paymentMethod, ...res
       Payment_Status: created.paymentStatus,
       Receipt_Number: created.receiptNumber ?? null,
       Total_Paid: totalPaidAfter,
-      Created_At: formatDate(created.createdAt),
+      Created_At: formatDateTime(created.createdAt),
     };
   });
 };
