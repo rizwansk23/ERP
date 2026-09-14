@@ -6,6 +6,7 @@ import authRoutes from './modules/auth/auth.routes.js';
 import { errorHandler } from './middleware/error.middleware.js';
 import staffRoutes from './modules/staff/staff.routes.js';
 import activityLogRoutes from './modules/activity-logs/activity.routes.js';
+import customerIntakeRoutes from './modules/customer-intake/customer_intake.routes.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/auth', authRoutes);
 app.use('/api/staff', staffRoutes);
 app.use('/api/activity-logs', activityLogRoutes);
+app.use('/api/customer-intake', customerIntakeRoutes);
 app.use(errorHandler);
 
 export default app;
