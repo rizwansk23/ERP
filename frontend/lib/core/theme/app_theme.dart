@@ -24,20 +24,18 @@ class AppTheme {
       ),
     );
 
-    // ==========================================
-    // FONT STYLES (Test by uncommenting one)
-    // ==========================================
-    
-    // Option A: Poppins (Clean, Round, Modern - Best for Dashboards)
-    // return baseTheme.copyWith(textTheme: GoogleFonts.poppinsTextTheme(baseTheme.textTheme));
-    
-    // Option B: Inter (Highly Readable, Default choice for modern web apps)
-    return baseTheme.copyWith(textTheme: GoogleFonts.interTextTheme(baseTheme.textTheme));
-    
-    // Option C: Roboto (Classic Android, Professional & Dense)
-    // return baseTheme.copyWith(textTheme: GoogleFonts.robotoTextTheme(baseTheme.textTheme));
+      // Font Style
+      
+      // Cambria 
+      // return baseTheme.copyWith(textTheme: GoogleFonts.cambriaTextTheme(baseTheme.textTheme));
 
-    // Option D: Lato (Elegant, slightly thinner, good for corporate ERPs)
-    // return baseTheme.copyWith(textTheme: GoogleFonts.latoTextTheme(baseTheme.textTheme));
+      //Times New Roman
+      // return baseTheme.copyWith(textTheme: GoogleFonts.timesNewRomanTextTheme(baseTheme.textTheme));
+
+      // Comic Sans
+      // return baseTheme.copyWith(textTheme: GoogleFonts.comicNeueTextTheme(baseTheme.textTheme)); // Comic Neue is the modern, web-safe version of Comic Sans available in Google Fonts
+
+      // System Default
+      return baseTheme;
   }
 }

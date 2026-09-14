@@ -50,7 +50,7 @@ class _PaymentDashboardScreenState extends State<PaymentDashboardScreen> {
     final payments = _filteredPayments;
     final textTheme = Theme.of(context).textTheme;
 
-    // NAYA: Screen ki width check karke spacing dynamically set karo
+    // Dynamic Screen Width For All Screen Size
     final screenWidth = MediaQuery.of(context).size.width;
     final double dynamicColumnSpacing = screenWidth < 1200 ? 12.0 : 24.0; 
     final double dynamicMargin = screenWidth < 1200 ? 8.0 : 14.0;
@@ -195,7 +195,6 @@ class _PaymentDashboardScreenState extends State<PaymentDashboardScreen> {
     );
   }
 
-  // YAHAN FUNCTION KI JAGAH ValueChanged<bool> LAGAYA HAI TO FIX THE SYNTAX ERROR
   Widget _buildFilterChip(String label, bool isSelected, ValueChanged<bool> onChanged, TextTheme textTheme) {
     return FilterChip(
       label: Text(label),

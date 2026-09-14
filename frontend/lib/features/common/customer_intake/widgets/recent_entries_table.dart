@@ -2,15 +2,108 @@
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../../core/theme/app_colors.dart';
 
+// DATA MODEL (Backend ke liye ready) Backend aane par JSON ko isme map karna hoga
+class RecentEntryModel {
+  final String name;
+  final String surname;
+  final String mobile;
+  final String argNo;
+  final String service;
+  final String deadline;
+  final double charges;
+  final double discount;
+  final double advance;
+  final String paymentMode;
+  final bool isOverdue; // Deadline red dikhane ke liye
+
+  RecentEntryModel({
+    required this.name,
+    required this.surname,
+    required this.mobile,
+    required this.argNo,
+    required this.service,
+    required this.deadline,
+    required this.charges,
+    required this.discount,
+    required this.advance,
+    required this.paymentMode,
+    this.isOverdue = false,
+  });
+
+  // Automatically calculate balance
+  double get balance => (charges - discount) - advance;
+  String get fullName => '$name $surname';
+
+  // API payload ya Edit form ke liye map convertor
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'surname': surname,
+      'mobile': mobile,
+      'argNo': argNo,
+      'deadline': deadline,
+      'charges': charges.toInt().toString(),
+      'discount': discount.toInt().toString(),
+      'advance': advance.toInt().toString(),
+      'paymentMode': paymentMode,
+    };
+  }
+}
+
+
+// MAIN WIDGET
 class RecentEntriesTable extends StatelessWidget {
-  final Function(Map<String, dynamic>)? onEdit; // <-- EDIT CALLBACK
-  
+  final Function(Map<String, dynamic>)? onEdit;
+
   const RecentEntriesTable({super.key, this.onEdit});
 
+  // DUMMY DATA
+  List<RecentEntryModel> get _dummyData => [
+        RecentEntryModel(
+          name: 'Rohan', surname: 'Mehta', mobile: '9820011234', argNo: 'ARG-2026-001',
+          service: 'Screen Repair', deadline: '15-09-2026',
+          charges: 2200, discount: 0, advance: 2200, paymentMode: 'Cash', isOverdue: true,
+        ),
+        RecentEntryModel(
+          name: 'Ayesha', surname: 'Khan', mobile: '9987055621', argNo: 'ARG-2026-002',
+          service: 'Battery Replacement', deadline: '05-10-2026',
+          charges: 950, discount: 50, advance: 450, paymentMode: 'Online', isOverdue: false,
+        ),
+      ];
+
+  
+  // REUSABLE UI HELPERS (Taki code repeat na ho)
+  DataCell _buildTextCell(String text, TextTheme textTheme, {Color? color, bool isBold = false}) {
+    return DataCell(
+      Text(
+        text,
+        style: textTheme.bodyMedium?.copyWith(
+          color: color ?? AppColors.ink,
+          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+        ),
+        softWrap: false,
+      ),
+    );
+  }
+
+  DataCell _buildArgCell(String argNo, TextTheme textTheme) {
+    return DataCell(
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        decoration: BoxDecoration(color: const Color(0xFFE8EEF7), borderRadius: BorderRadius.circular(5)),
+        child: Text(argNo, style: textTheme.bodyMedium?.copyWith(color: AppColors.navy2, fontWeight: FontWeight.bold), softWrap: false),
+      ),
+    );
+  }
+
+ 
+  // BUILD METHOD
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    
+    // Backend aane ke baad yahan _dummyData ki jagah API ka list variable aayega
+    final entries = _dummyData; 
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -18,6 +111,7 @@ class RecentEntriesTable extends StatelessWidget {
         const SizedBox(height: 16),
         Container(
           width: double.infinity,
+          clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(8),
@@ -46,88 +140,35 @@ class RecentEntriesTable extends StatelessWidget {
                       DataColumn(label: Text('BALANCE', style: textTheme.labelSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold), softWrap: false)),
                       DataColumn(label: Text('ACTION', style: textTheme.labelSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold), softWrap: false)),
                     ],
-                    rows: [
-                      DataRow(cells: [
-                        DataCell(Text('1', style: textTheme.bodyMedium?.copyWith(color: AppColors.faint), softWrap: false)),
-                        DataCell(Text('Rohan Mehta', style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold), softWrap: false)),
-                        DataCell(
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(color: const Color(0xFFE8EEF7), borderRadius: BorderRadius.circular(5)),
-                            child: Text('ARG-2026-001', style: textTheme.bodyMedium?.copyWith(color: AppColors.navy2, fontWeight: FontWeight.bold), softWrap: false),
-                          ),
-                        ),
-                        DataCell(Text('Screen Repair', softWrap: false)),
-                        DataCell(Text('15-09-2026', style: textTheme.bodyMedium?.copyWith(color: AppColors.red, fontWeight: FontWeight.bold), softWrap: false)), 
-                        DataCell(Text('₹0', style: textTheme.bodyMedium?.copyWith(color: AppColors.green, fontWeight: FontWeight.bold), softWrap: false)),
-                        DataCell(
-                          OutlinedButton.icon(
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                              minimumSize: const Size(0, 0),
-                              side: const BorderSide(color: AppColors.line),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                    // Fetch all records from list
+                    rows: entries.asMap().entries.map((mapEntry) {
+                      int index = mapEntry.key;
+                      RecentEntryModel entry = mapEntry.value;
+
+                      return DataRow(
+                        cells: [
+                          _buildTextCell('${index + 1}', textTheme, color: AppColors.faint),
+                          _buildTextCell(entry.fullName, textTheme, isBold: true),
+                          _buildArgCell(entry.argNo, textTheme),
+                          _buildTextCell(entry.service, textTheme),
+                          _buildTextCell(entry.deadline, textTheme, color: entry.isOverdue ? AppColors.red : AppColors.ink, isBold: entry.isOverdue),
+                          _buildTextCell('₹${entry.balance.toInt()}', textTheme, color: entry.balance > 0 ? AppColors.amber : AppColors.green, isBold: true),
+                          DataCell(
+                            OutlinedButton.icon(
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                minimumSize: const Size(0, 0),
+                                side: const BorderSide(color: AppColors.line),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                              ),
+                              onPressed: onEdit != null ? () => onEdit!(entry.toMap()) : null,
+                              // icon: const Icon(LucideIcons.edit2, size: 14, color: AppColors.navy2),
+                              label: Text('Edit', style: textTheme.bodyMedium?.copyWith(color: AppColors.navy2, fontWeight: FontWeight.bold), softWrap: false),
                             ),
-                            // EDIT BUTTON 1 
-                            onPressed: onEdit != null ? () {
-                              onEdit!({
-                                'name': 'Rohan',
-                                'surname': 'Mehta',
-                                'mobile': '9820011234',
-                                'argNo': 'ARG-2026-001',
-                                'deadline': '15-09-2026',
-                                'charges': '2200',
-                                'discount': '0',
-                                'advance': '2200',
-                                'paymentMode': 'Cash'
-                              });
-                            } : null,
-                            icon: const Icon(LucideIcons.edit2, size: 14, color: AppColors.navy2),
-                            label: Text('Edit', style: textTheme.bodyMedium?.copyWith(color: AppColors.navy2, fontWeight: FontWeight.bold), softWrap: false),
                           ),
-                        ),
-                      ]),
-                      DataRow(cells: [
-                        DataCell(Text('2', style: textTheme.bodyMedium?.copyWith(color: AppColors.faint), softWrap: false)),
-                        DataCell(Text('Ayesha Khan', style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold), softWrap: false)),
-                        DataCell(
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(color: const Color(0xFFE8EEF7), borderRadius: BorderRadius.circular(5)),
-                            child: Text('ARG-2026-002', style: textTheme.bodyMedium?.copyWith(color: AppColors.navy2, fontWeight: FontWeight.bold), softWrap: false),
-                          ),
-                        ),
-                        DataCell(Text('Battery Replacement', softWrap: false)),
-                        DataCell(Text('05-10-2026', softWrap: false)),
-                        DataCell(Text('₹450', style: textTheme.bodyMedium?.copyWith(color: AppColors.amber, fontWeight: FontWeight.bold), softWrap: false)),
-                        DataCell(
-                          OutlinedButton.icon(
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                              minimumSize: const Size(0, 0),
-                              side: const BorderSide(color: AppColors.line),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                            ),
-                            // EDIT BUTTON 2
-                            onPressed: onEdit != null ? () {
-                              onEdit!({
-                                'name': 'Ayesha',
-                                'surname': 'Khan',
-                                'mobile': '9987055621',
-                                'argNo': 'ARG-2026-002',
-                                'deadline': '05-10-2026',
-                                'charges': '950',
-                                'discount': '50',
-                                'advance': '450',
-                                'paymentMode': 'Online'
-                              });
-                            } : null,
-                            icon: const Icon(LucideIcons.edit2, size: 14, color: AppColors.navy2),
-                            label: Text('Edit', style: textTheme.bodyMedium?.copyWith(color: AppColors.navy2, fontWeight: FontWeight.bold), softWrap: false),
-                          ),
-                        ),
-                      ]),
-                    ],
+                        ],
+                      );
+                    }).toList(),
                   ),
                 ),
               );
