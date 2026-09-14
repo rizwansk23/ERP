@@ -1,0 +1,6 @@
+export const ALLOWED_WORK_STATUSES = {
+    ACCEPT:'ACCEPT',
+    PENDING:'PENDING',
+    REJECT:'REJECT'
+}
+
