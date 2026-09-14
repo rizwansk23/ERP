@@ -1,4 +1,4 @@
-import * as repository from './user.repository.js';
+import * as repository from './admin.repository.js';
 
 export const getOne = async (id) => {
     return await repository.findById(id);

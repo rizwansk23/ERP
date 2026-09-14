@@ -68,7 +68,7 @@ CREATE TABLE "login_sessions" (
 
 -- CreateTable
 CREATE TABLE "payments" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "work_id" INTEGER NOT NULL,
     "paid" REAL NOT NULL DEFAULT 0,
     "remaining" REAL NOT NULL DEFAULT 0,

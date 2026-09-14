@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import * as controller from './user.controller.js';
+import * as controller from './admin.controller.js';
 
 router.get('/:id', controller.getOne);
 router.post('/', controller.create);

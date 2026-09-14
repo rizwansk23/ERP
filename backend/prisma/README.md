@@ -27,7 +27,7 @@ npm install prisma @prisma/client
 
 `.env`:
 ```
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="file:../dev.db"
 ```
 
 `package.json` (tell Prisma the schema is a folder, not a single file):
