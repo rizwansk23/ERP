@@ -22,7 +22,7 @@ model Payment {
 
   paymentMethod String  @map("payment_method")
   paymentStatus String? @map("payment_status")
-  receiptNumber String? @map("receipt_number")
+ receiptNumber String? @unique @map("receipt_number")
 
   createdById Int      @map("created_by")
   createdBy   User     @relation("PaymentCreatedByUser", fields: [createdById], references: [id])
