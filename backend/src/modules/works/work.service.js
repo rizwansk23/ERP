@@ -70,3 +70,7 @@ export const updateWorkStatus = async ({
     deadline,
   });
 };
+
+export const deleteWork = async ({ work_id }) => {
+  return repository.deleteWorkById(work_id);
+};

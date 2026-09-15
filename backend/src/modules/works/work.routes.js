@@ -8,6 +8,7 @@ router.get('/', validateWorkListQuery, controller.getAllWorks);
 router
   .route('/:work_id')
   .get(validateWorkId, controller.getOneWork)
-  .patch(validateWorkId, validateWorkUpdate, controller.updateWorkStatus);
+  .patch(validateWorkId, validateWorkUpdate, controller.updateWorkStatus)
+  .delete(validateWorkId, controller.deleteWork);
 
 export default router;

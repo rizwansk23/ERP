@@ -35,3 +35,11 @@ export const updateWorkStatus = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, data });
 });
+
+export const deleteWork = asyncHandler(async (req, res) => {
+  const { work_id } = req.validateWorkId;
+
+  const data = service.deleteWork({ work_id });
+
+  res.send(200).json({ message: 'success', data });
+});

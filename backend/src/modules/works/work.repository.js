@@ -79,7 +79,7 @@ export const updateWorkStatusById = async ({
   if (status !== undefined) data.status = status;
   if (isDelivered !== undefined) data.delivered = isDelivered;
   if (isCompleted !== undefined) data.completed = isCompleted;
-  if( isProcessed !== undefined ) data.processed = isProcessed;
+  if (isProcessed !== undefined) data.processed = isProcessed;
   if (reference !== undefined) data.reference = reference;
   if (customerName !== undefined) data.customer = { update: customerName };
   if (deadline !== undefined) data.deadline = deadline;
@@ -89,6 +89,15 @@ export const updateWorkStatusById = async ({
       id: work_id,
     },
     data,
+    select: selectOneWork,
+  });
+};
+
+export const deleteWorkById = async (work_id) => {
+  return Prisma.work.delete({
+    where: {
+      id: work_id,
+    },
     select: selectOneWork,
   });
 };
