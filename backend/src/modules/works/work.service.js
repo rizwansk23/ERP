@@ -1,5 +1,7 @@
 import * as repository from './work.repository.js';
 import { formatDate } from '../../utils/helpers.js';
+import AppError from '../../utils/errors.js';
+import { MODULES } from '../../enum/modules.js';
 
 export const getAllWorks = async ({ page, limit, search }) => {
   const { total, rows: works } = await repository.findAllWorks({ page, limit, search });
@@ -33,6 +35,29 @@ export const getOneWork = async ({ work_id }) => {
   };
 };
 
-export const updateWorkStatus = async ({ work_id, status, isDelivered, isCompleted }) => {
+export const updateWorkStatus = async ({ work_id, status, isDelivered, isCompleted, adminPassword }) => {
+  const existing = await repository.findWorkById({ work_id });
+  if (!existing) {
+    throw new AppError(`Work with ID ${work_id} not found`, 404, MODULES.WORKS);
+  }
+
+  const isDeliveredDowngrade = existing.delivered === true && isDelivered === false;
+  const isCompletedDowngrade = existing.completed === true && isCompleted === false;
+
+  if (isDeliveredDowngrade || isCompletedDowngrade) {
+    if (!adminPassword) {
+      throw new AppError(
+        'To change delivered/completed from true to false, admin password is required.',
+        403,
+        MODULES.WORKS,
+      );
+    }
+
+    const admin = await repository.findActiveAdminByPassword(adminPassword);
+    if (!admin) {
+      throw new AppError('Invalid admin password.', 403, MODULES.WORKS);
+    }
+  }
+
   return await repository.updateWorkStatusById({ work_id, status, isCompleted, isDelivered });
 };

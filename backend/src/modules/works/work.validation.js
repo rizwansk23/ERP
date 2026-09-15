@@ -62,16 +62,35 @@ export const validateWorkId = (req, _res, next) => {
 };
 
 export const validateWorkUpdate = (req, _res, next) => {
-  const requestBody = req.body;
-  let { status, delivered: isDelivered, completed: isCompleted } = requestBody;
+  const requestBody = req.body ?? {};
+  if (typeof requestBody !== 'object' || Array.isArray(requestBody)) {
+    fail('Request body must be an object.');
+  }
 
-  if (status) status = normalizeWorkStatus(status);
+  let { status, delivered, completed, adminPassword } = requestBody;
 
-  if (isDelivered) fail('to change the delivery status,admin password is required');
+  if (status !== undefined) status = normalizeWorkStatus(status);
 
-  if (isCompleted) fail('to change the completed status,admin password is required');
+  if (delivered !== undefined && typeof delivered !== 'boolean') {
+    fail('delivered must be a boolean.');
+  }
 
-  req.validateWorkStatus = { status, isDelivered, isCompleted };
+  if (completed !== undefined && typeof completed !== 'boolean') {
+    fail('completed must be a boolean.');
+  }
+
+  if (adminPassword !== undefined) {
+    if (typeof adminPassword !== 'string' || adminPassword.trim() === '') {
+      fail('adminPassword, when provided, must be a non-empty string.');
+    }
+    adminPassword = adminPassword.trim();
+  }
+
+  if (status === undefined && delivered === undefined && completed === undefined) {
+    fail('At least one field is required: status, delivered, completed.');
+  }
+
+  req.validateWorkStatus = { status, isDelivered: delivered, isCompleted: completed, adminPassword };
 
   next();
 };

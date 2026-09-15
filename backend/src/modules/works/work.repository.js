@@ -52,15 +52,38 @@ export const findOneWork = async ({ work_id }) => {
   });
 };
 
+export const findWorkById = async ({ work_id }) => {
+  return Prisma.work.findFirst({
+    where: {
+      id: work_id,
+      deletedAt: null,
+    },
+    select: { id: true, delivered: true, completed: true },
+  });
+};
+
+export const findActiveAdminByPassword = async (adminPassword) => {
+  return Prisma.user.findFirst({
+    where: {
+      role: 'ADMIN',
+      passwordHash: adminPassword,
+      isActive: true,
+      deletedAt: null,
+    },
+    select: { id: true },
+  });
+};
+
 export const updateWorkStatusById = async ({ work_id, status, isCompleted, isDelivered }) => {
+  const data = {};
+  if (status !== undefined) data.status = status;
+  if (isDelivered !== undefined) data.delivered = isDelivered;
+  if (isCompleted !== undefined) data.completed = isCompleted;
+
   return Prisma.work.update({
     where: {
       id: work_id,
     },
-    data: {
-      status: status,
-      delivered: isDelivered,
-      completed: isCompleted,
-    },
+    data,
   });
 };
