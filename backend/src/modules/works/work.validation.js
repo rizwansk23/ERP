@@ -8,12 +8,15 @@ const fail = (message, details) => {
   throw err;
 };
 
-export const normalizeWorkStatus = (value) => {
-  if (value === undefined) return undefined;
+const normalizeWorkStatus = (value) => {
   if (typeof value !== 'string') fail('status must be a string.');
+
   const upper = value.trim().toUpperCase();
-  if (!ALLOWED_WORK_STATUSES.includes(upper)) {
-    fail(`Invalid status "${value}". Allowed: ${ALLOWED_WORK_STATUSES.join(', ')}.`);
+
+  const allowedValues = Object.values(ALLOWED_WORK_STATUSES);
+
+  if (!allowedValues.includes(upper)) {
+    fail(`Invalid status "${value}". Allowed: ${allowedValues.join(', ')}.`);
   }
   return upper;
 };
@@ -55,5 +58,20 @@ export const validateWorkListQuery = (req, _res, next) => {
 
 export const validateWorkId = (req, _res, next) => {
   req.validateWorkId = validateParamsId(req.params.work_id);
+  next();
+};
+
+export const validateWorkUpdate = (req, _res, next) => {
+  const requestBody = req.body;
+  let { status, delivered: isDelivered, completed: isCompleted } = requestBody;
+
+  if (status) status = normalizeWorkStatus(status);
+
+  if (isDelivered) fail('to change the delivery status,admin password is required');
+
+  if (isCompleted) fail('to change the completed status,admin password is required');
+
+  req.validateWorkStatus = { status, isDelivered, isCompleted };
+
   next();
 };

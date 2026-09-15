@@ -27,11 +27,6 @@ const ALLOWED_STATUSES = Object.values(PAYMENT_STATUS);
 const MAX_AMOUNT = 1000000000; // yeh change hoga total work amount se "CHANGE"
 const EPSILON = 0.005;
 
-// yeh remove hoga agar akash ne id uuid rakhne bola toh nahi toh yeh hi rahi ga
-// "DELETE" if conidition is true
-export const parseWorkId = (value) => {
-    return valideParamsIDs(value,"work_id")
-};
 
 export const normalizePaymentMethod = (value) => {
   if (typeof value !== 'string') fail('paymentMethod is required and must be a string.');
@@ -67,7 +62,7 @@ export const normalizeActorId = (value) => {
 
 
 export const validateWorkIdParam = (req, _res, next) => {
-  req.validatedWorkId = parseWorkId(req.params.work_id);
+  req.validatedWorkId = valideParamsIDs(req.params.work_id,"work_id");
   next();
 };
 

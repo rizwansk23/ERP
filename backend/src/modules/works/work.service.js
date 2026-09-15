@@ -33,6 +33,6 @@ export const getOneWork = async ({ work_id }) => {
   };
 };
 
-export const create = async (data) => {
-  return await repository.create(data);
+export const updateWorkStatus = async ({ work_id, status, isDelivered, isCompleted }) => {
+  return await repository.updateWorkStatusById({ work_id, status, isCompleted, isDelivered });
 };

@@ -52,7 +52,15 @@ export const findOneWork = async ({ work_id }) => {
   });
 };
 
-export const create = async (data) => {
-  // DB Logic here
-  return { id: 'new-id', ...data };
+export const updateWorkStatusById = async ({ work_id, status, isCompleted, isDelivered }) => {
+  return Prisma.work.update({
+    where: {
+      id: work_id,
+    },
+    data: {
+      status: status,
+      delivered: isDelivered,
+      completed: isCompleted,
+    },
+  });
 };
