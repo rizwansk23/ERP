@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   - name: Works
- *     description: APIs for listing, viewing and updating works
+ *     description: APIs for listing, viewing, updating and deleting works
  */
 
 /**
@@ -119,6 +119,37 @@
  *               properties:
  *                 message:
  *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/WorkDetail'
+ *       400:
+ *         description: Invalid work ID
+ *       404:
+ *         description: Work not found
+ */
+
+/**
+ * @swagger
+ * /api/works/{work_id}:
+ *   delete:
+ *     summary: Soft delete a work by ID
+ *     tags: [Works]
+ *     parameters:
+ *       - in: path
+ *         name: work_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The work ID
+ *     responses:
+ *       200:
+ *         description: Work deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
  *                 data:
  *                   $ref: '#/components/schemas/WorkDetail'
  *       400:
