@@ -72,5 +72,10 @@ export const updateWorkStatus = async ({
 };
 
 export const deleteWork = async ({ work_id }) => {
-  return repository.deleteWorkById(work_id);
+  const existing = await repository.findWorkById({ work_id });
+  if (!existing) {
+    throw new AppError(`Work with ID ${work_id} not found`, 404, MODULES.WORKS);
+  }
+
+  return repository.deleteWorkById({ work_id });
 };

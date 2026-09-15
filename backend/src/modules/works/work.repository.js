@@ -50,6 +50,7 @@ export const findOneWork = async ({ work_id }) => {
   return Prisma.work.findFirst({
     where: {
       id: work_id,
+      deletedAt: null,
     },
     select: selectOneWork,
   });
@@ -93,10 +94,13 @@ export const updateWorkStatusById = async ({
   });
 };
 
-export const deleteWorkById = async (work_id) => {
-  return Prisma.work.delete({
+export const deleteWorkById = async ({ work_id }) => {
+  return Prisma.work.update({
     where: {
       id: work_id,
+    },
+    data: {
+      deletedAt: new Date(),
     },
     select: selectOneWork,
   });

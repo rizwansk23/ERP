@@ -22,7 +22,7 @@ const normalizeWorkStatus = (value) => {
 };
 
 const validateParamsId = (value) => {
-  if (value === undefined || value === null || value === '') return undefined;
+  if (value === undefined || value === null || value === '') fail('work_id is required.');
   if (!Number(value)) fail(`Invalid work id  "${value}". Its must be integer.`);
 
   const id = Number(value);

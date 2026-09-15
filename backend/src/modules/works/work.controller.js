@@ -10,7 +10,7 @@ export const getAllWorks = asyncHandler(async (req, res) => {
 });
 
 export const getOneWork = asyncHandler(async (req, res) => {
-  const { work_id } = req.validateWorkId;
+  const work_id = req.validateWorkId;
 
   const data = await service.getOneWork({ work_id });
 
@@ -37,9 +37,9 @@ export const updateWorkStatus = asyncHandler(async (req, res) => {
 });
 
 export const deleteWork = asyncHandler(async (req, res) => {
-  const { work_id } = req.validateWorkId;
+  const work_id = req.validateWorkId;
 
-  const data = service.deleteWork({ work_id });
+  const data = await service.deleteWork({ work_id });
 
-  res.send(200).json({ message: 'success', data });
+  res.status(200).json({ success: true, data });
 });
