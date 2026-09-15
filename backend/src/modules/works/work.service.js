@@ -35,29 +35,38 @@ export const getOneWork = async ({ work_id }) => {
   };
 };
 
-export const updateWorkStatus = async ({ work_id, status, isDelivered, isCompleted, adminPassword }) => {
+export const updateWorkStatus = async ({
+  work_id,
+  status,
+  isDelivered,
+  isCompleted,
+  isProcessed,
+  reference,
+  customer_name,
+  deadline,
+}) => {
   const existing = await repository.findWorkById({ work_id });
   if (!existing) {
     throw new AppError(`Work with ID ${work_id} not found`, 404, MODULES.WORKS);
   }
 
-  const isDeliveredDowngrade = existing.delivered === true && isDelivered === false;
-  const isCompletedDowngrade = existing.completed === true && isCompleted === false;
-
-  if (isDeliveredDowngrade || isCompletedDowngrade) {
-    if (!adminPassword) {
-      throw new AppError(
-        'To change delivered/completed from true to false, admin password is required.',
-        403,
-        MODULES.WORKS,
-      );
-    }
-
-    const admin = await repository.findActiveAdminByPassword(adminPassword);
-    if (!admin) {
-      throw new AppError('Invalid admin password.', 403, MODULES.WORKS);
-    }
+  let customerName;
+  if (customer_name !== undefined) {
+    const [first, ...rest] = customer_name.split(' ');
+    customerName = {
+      name: first,
+      surname: rest.length > 0 ? rest.join(' ') : (existing.customer?.surname ?? ''),
+    };
   }
 
-  return await repository.updateWorkStatusById({ work_id, status, isCompleted, isDelivered });
+  return await repository.updateWorkStatusById({
+    work_id,
+    status,
+    isCompleted,
+    isDelivered,
+    isProcessed,
+    reference,
+    customerName,
+    deadline,
+  });
 };

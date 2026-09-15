@@ -33,22 +33,25 @@ export const findAllWorks = async ({ page, limit, search }) => {
   return { total, rows };
 };
 
+const selectOneWork = {
+  acknowledgementNumber: true,
+  reference: true,
+  createdAt: true,
+  deadline: true,
+  status: true,
+  delivered: true,
+  completed: true,
+  processed: true,
+  customer: { select: { name: true, surname: true } },
+  service: { select: { name: true } },
+};
+
 export const findOneWork = async ({ work_id }) => {
   return Prisma.work.findFirst({
     where: {
       id: work_id,
     },
-    select: {
-      acknowledgementNumber: true,
-      reference: true,
-      createdAt: true,
-      deadline: true,
-      status: true,
-      delivered: true,
-      completed: true,
-      customer: { select: { name: true, surname: true } },
-      service: { select: { name: true } },
-    },
+    select: selectOneWork,
   });
 };
 
@@ -58,32 +61,34 @@ export const findWorkById = async ({ work_id }) => {
       id: work_id,
       deletedAt: null,
     },
-    select: { id: true, delivered: true, completed: true },
+    select: { id: true, customer: { select: { name: true, surname: true } } },
   });
 };
 
-export const findActiveAdminByPassword = async (adminPassword) => {
-  return Prisma.user.findFirst({
-    where: {
-      role: 'ADMIN',
-      passwordHash: adminPassword,
-      isActive: true,
-      deletedAt: null,
-    },
-    select: { id: true },
-  });
-};
-
-export const updateWorkStatusById = async ({ work_id, status, isCompleted, isDelivered }) => {
+export const updateWorkStatusById = async ({
+  work_id,
+  status,
+  isCompleted,
+  isDelivered,
+  isProcessed,
+  reference,
+  customerName,
+  deadline,
+}) => {
   const data = {};
   if (status !== undefined) data.status = status;
   if (isDelivered !== undefined) data.delivered = isDelivered;
   if (isCompleted !== undefined) data.completed = isCompleted;
+  if( isProcessed !== undefined ) data.processed = isProcessed;
+  if (reference !== undefined) data.reference = reference;
+  if (customerName !== undefined) data.customer = { update: customerName };
+  if (deadline !== undefined) data.deadline = deadline;
 
   return Prisma.work.update({
     where: {
       id: work_id,
     },
     data,
+    select: selectOneWork,
   });
 };

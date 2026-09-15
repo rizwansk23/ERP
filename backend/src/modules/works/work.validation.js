@@ -61,36 +61,75 @@ export const validateWorkId = (req, _res, next) => {
   next();
 };
 
+const validateboolean = (value,name) => {
+  if (value !== undefined && typeof value !== 'boolean') fail(` ${name} must be a boolean.`);
+};
+
 export const validateWorkUpdate = (req, _res, next) => {
-  const requestBody = req.body ?? {};
-  if (typeof requestBody !== 'object' || Array.isArray(requestBody)) {
+  if (typeof req.body !== 'object' || req.body === null || Array.isArray(req.body))
     fail('Request body must be an object.');
+
+  const { status, delivered, completed, processed, reference, customer_name, deadline } = req.body;
+
+  let validStatus = status !== undefined ? normalizeWorkStatus(status) : undefined;
+
+  validateboolean(delivered, "Delivered");
+  validateboolean(completed, "Completed");
+  validateboolean(processed, "Processed");
+
+  let validReference = undefined;
+  if (reference !== undefined) {
+    if (typeof reference !== 'string') fail('reference must be a string.');
+
+    validReference = reference.trim();
+    if (validReference.length === 0) fail('reference must not be empty.');
+    if (validReference.length > 100) fail('reference must be less than 100 characters long.');
   }
 
-  let { status, delivered, completed, adminPassword } = requestBody;
-
-  if (status !== undefined) status = normalizeWorkStatus(status);
-
-  if (delivered !== undefined && typeof delivered !== 'boolean') {
-    fail('delivered must be a boolean.');
+  let validDeadline = undefined;
+  if (deadline !== undefined) {
+    const parsed = deadline instanceof Date ? deadline : new Date(deadline);
+    if (
+      (typeof deadline !== 'string' && !(deadline instanceof Date)) ||
+      Number.isNaN(parsed.getTime())
+    )
+      fail('deadline must be a valid date.');
+    validDeadline = parsed;
   }
 
-  if (completed !== undefined && typeof completed !== 'boolean') {
-    fail('completed must be a boolean.');
+  let validCustomerName = undefined;
+  if (customer_name !== undefined) {
+    if (typeof customer_name !== 'string') fail('customer_name must be a string.');
+    validCustomerName = customer_name.trim().replace(/\s+/g, ' ');
+    if (validCustomerName.length === 0) fail('customer_name must not be empty.');
+    if (validCustomerName.length > 100)
+      fail('customer_name must be less than 100 characters long.');
   }
 
-  if (adminPassword !== undefined) {
-    if (typeof adminPassword !== 'string' || adminPassword.trim() === '') {
-      fail('adminPassword, when provided, must be a non-empty string.');
-    }
-    adminPassword = adminPassword.trim();
-  }
+  if (
+    [
+      validStatus,
+      delivered,
+      completed,
+      processed,
+      validReference,
+      validCustomerName,
+      validDeadline,
+    ].every((v) => v === undefined)
+  )
+    fail(
+      'At least one field is required: status, delivered, completed, reference, customer_name, deadline.',
+    );
 
-  if (status === undefined && delivered === undefined && completed === undefined) {
-    fail('At least one field is required: status, delivered, completed.');
-  }
-
-  req.validateWorkStatus = { status, isDelivered: delivered, isCompleted: completed, adminPassword };
+  req.validateWorkStatus = {
+    status: validStatus,
+    isDelivered: delivered,
+    isCompleted: completed,
+    isProcessed: processed,
+    reference: validReference,
+    customer_name: validCustomerName,
+    deadline: validDeadline,
+  };
 
   next();
 };

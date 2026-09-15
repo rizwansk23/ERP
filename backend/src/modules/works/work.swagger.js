@@ -152,13 +152,18 @@
  *                 enum: [ACCEPT, PENDING, REJECT]
   *               delivered:
   *                 type: boolean
-  *                 description: Setting delivered from true to false requires adminPassword
   *               completed:
   *                 type: boolean
-  *                 description: Setting completed from true to false requires adminPassword
-  *               adminPassword:
+  *               reference:
   *                 type: string
-  *                 description: Required only when turning delivered/completed from true to false
+  *                 description: Work reference (max 100 characters)
+  *               customer_name:
+  *                 type: string
+  *                 description: Customer full name, split into name and surname on update (max 100 characters)
+  *               deadline:
+  *                 type: string
+  *                 format: date-time
+  *                 description: Work deadline as a valid date string
   *     responses:
   *       200:
   *         description: Work status updated successfully
@@ -173,8 +178,6 @@
   *                   type: object
   *       400:
   *         description: Invalid status, work ID, or request body
-  *       403:
-  *         description: Admin password required or invalid for true-to-false delivered/completed change
   *       404:
   *         description: Work not found
  */

@@ -19,9 +19,19 @@ export const getOneWork = asyncHandler(async (req, res) => {
 
 export const updateWorkStatus = asyncHandler(async (req, res) => {
   const work_id = req.validateWorkId;
-  const { status, isDelivered, isCompleted, adminPassword } = req.validateWorkStatus;
+  const { status, isDelivered, isCompleted, isProcessed, reference, customer_name, deadline } =
+    req.validateWorkStatus;
 
-  const data = await service.updateWorkStatus({ work_id, status, isDelivered, isCompleted, adminPassword });
+  const data = await service.updateWorkStatus({
+    work_id,
+    status,
+    isDelivered,
+    isCompleted,
+    isProcessed,
+    reference,
+    customer_name,
+    deadline,
+  });
 
   res.status(200).json({ success: true, data });
 });
