@@ -160,7 +160,7 @@ class AppShell extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(32.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: child,
                   ),
                 ),
