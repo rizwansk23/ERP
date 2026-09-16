@@ -1,12 +1,65 @@
-import { asyncHandler } from '../../utils/asyncHandler.js';
-import * as service from './work.service.js';
+import {
+    getWorksService,
+    getWorkByIdService,
+    updateWorkService
+} from './work.service.js';
 
-export const getOne = asyncHandler(async (req, res) => {
-    const data = await service.getOne(req.params.id);
-    res.status(200).json({ success: true, data });
-});
+export const getWorks = async (req, res) => {
+    try {
+        const works = await getWorksService(req.query);
 
-export const create = asyncHandler(async (req, res) => {
-    const data = await service.create(req.body);
-    res.status(201).json({ success: true, data });
-});
+        return res.status(200).json({
+            success: true,
+            message: 'Works fetched successfully',
+            data: works
+        });
+    } catch (error) {
+        console.error('Get works error:', error);
+
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message || 'Failed to fetch works'
+        });
+    }
+};
+
+export const getOne = async (req, res) => {
+    try {
+        const work = await getWorkByIdService(req.params.id);
+
+        return res.status(200).json({
+            success: true,
+            message: 'Work fetched successfully',
+            data: work
+        });
+    } catch (error) {
+        console.error('Get work error:', error);
+
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message || 'Failed to fetch work'
+        });
+    }
+};
+
+export const update = async (req, res) => {
+    try {
+        const work = await updateWorkService(
+            req.params.id,
+            req.body
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: 'Work updated successfully',
+            data: work
+        });
+    } catch (error) {
+        console.error('Update work error:', error);
+
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message || 'Failed to update work'
+        });
+    }
+};
