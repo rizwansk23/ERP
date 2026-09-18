@@ -9,6 +9,7 @@ import { errorHandler } from './middleware/error.middleware.js';
 import staffRoutes from './modules/staff/staff.routes.js';
 import activityLogRoutes from './modules/activity-logs/activity.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
+import workRoutes from './modules/works/work.routes.js';
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', adminRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/works', workRoutes);
 
 app.use('/api/staff', staffRoutes);
 app.use('/api/activity-logs', activityLogRoutes);
