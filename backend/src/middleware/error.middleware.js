@@ -14,5 +14,7 @@ export const errorHandler = (err, req, res, next) => {
     success: false,
     module: err.module || 'UNKNOWN',
     error: err.isOperational ? err.message : 'Server Error',
+    ...(err.code && { code: err.code }),
+    ...(err.customer && { customer: err.customer }),
   });
 };

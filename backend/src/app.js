@@ -10,6 +10,8 @@ import staffRoutes from './modules/staff/staff.routes.js';
 import activityLogRoutes from './modules/activity-logs/activity.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
 import workRoutes from './modules/works/work.routes.js';
+import customerIntakeRoutes from './modules/customer-intake/customer_intake.routes.js';
+import serviceRoutes from './modules/services/service.routes.js';
 
 const app = express();
 
@@ -30,6 +32,9 @@ app.use('/api/staff', staffRoutes);
 app.use('/api/activity-logs', activityLogRoutes);
 
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/customer-intake', customerIntakeRoutes);
+app.use('/api/service', serviceRoutes);
+
 app.use(errorHandler);
 
 export default app;

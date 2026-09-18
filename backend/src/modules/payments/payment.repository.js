@@ -1,6 +1,4 @@
-import { randomUUID } from 'node:crypto';
 import Prisma from '../../database/connection.js';
-
 
 export const findById = async (id) => {
   return Prisma.work.findFirst({
@@ -34,7 +32,6 @@ export const findById = async (id) => {
   });
 };
 
-
 export const findWorkWithPayments = async (workId, client = Prisma) => {
   return client.work.findFirst({
     where: { id: workId, deletedAt: null },
@@ -48,7 +45,6 @@ export const findWorkWithPayments = async (workId, client = Prisma) => {
     },
   });
 };
-
 
 export const findWorks = async ({ page = 1, limit = 20, status, search } = {}) => {
   const skip = (page - 1) * limit;
@@ -98,7 +94,6 @@ export const AddPayment = async (
 ) => {
   return client.payment.create({
     data: {
-      id: randomUUID(),
       workId,
       paid: amount,
       remaining,
