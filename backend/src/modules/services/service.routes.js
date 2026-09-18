@@ -1,8 +1,12 @@
 import express from 'express';
-const router = express.Router();
 import * as controller from './service.controller.js';
+import { protect,authorize } from '../../middleware/auth.middleware.js';
+ 
+const router = express.Router();
 
-router.get('/:id', controller.getOne);
+// router.use(protect);
+
+router.get('/', controller.getAllServices);
 router.post('/', controller.create);
 
 export default router;
