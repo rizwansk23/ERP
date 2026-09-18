@@ -1,4 +1,4 @@
-# Backend Structure 
+# Backend Structure
 
 ```
 Backend/
@@ -66,9 +66,11 @@ Backend/
 ```
 
 ## Layer responsibility
+
 ```
 Route -> Controller -> Service -> Repository -> Model/DB
 ```
+
 - **Route**: URL + method mapping only
 - **Controller**: parse request, call service, send response
 - **Service**: business logic, calls repository

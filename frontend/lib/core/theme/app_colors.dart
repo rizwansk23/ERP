@@ -14,4 +14,6 @@ class AppColors {
   static const Color amber = Color(0xFF0F315D);
  static const Color red = Color(0xFF0F315D);
  static const Color whatsapp = Color(0xFF0F315D);
+ static const Color black = Colors.black;
+
 }

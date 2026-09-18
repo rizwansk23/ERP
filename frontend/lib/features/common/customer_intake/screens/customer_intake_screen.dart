@@ -77,7 +77,7 @@ class _CustomerIntakeScreenState extends State<CustomerIntakeScreen> {
     bool requiredFieldsValid = nameValid && surnameValid && mobileValid && deadlineValid;
 
     if (_isEditing) {
-      // Edit mode mein tabhi enable hoga jab required fields valid hon + koi value change hui ho
+      // Valid Edit pe he data update ho
       bool hasChanged = 
           _nameController.text != _initName ||
           _surnameController.text != _initSurname ||
@@ -93,7 +93,6 @@ class _CustomerIntakeScreenState extends State<CustomerIntakeScreen> {
         _isSaveEnabled = requiredFieldsValid && hasChanged;
       });
     } else {
-      // Normal Add mode
       setState(() {
         _isSaveEnabled = requiredFieldsValid;
       });
@@ -109,7 +108,7 @@ class _CustomerIntakeScreenState extends State<CustomerIntakeScreen> {
     if (remaining < 0) remaining = 0;
     
     _remainingController.text = remaining.toInt().toString();
-    _validateForm(); // Charges change hone par bhi validation check ho
+    _validateForm();
   }
 
   void _setDeadline(String type) {

@@ -5,6 +5,7 @@ class ErpTextField extends StatelessWidget {
   final String label;
   final String? hintText;
   final String? helperText;
+  final String? errorText;
   final bool isRequired;
   final bool readOnly;
   final Widget? suffixIcon;
@@ -17,6 +18,7 @@ class ErpTextField extends StatelessWidget {
     required this.label,
     this.hintText,
     this.helperText,
+    this.errorText,
     this.isRequired = false,
     this.readOnly = false,
     this.suffixIcon,
@@ -39,27 +41,28 @@ class ErpTextField extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        SizedBox(
-          height: 42,
-          child: TextField(
-            controller: controller,
-            readOnly: readOnly,
-            keyboardType: keyboardType,
-            onChanged: onChanged,
-            style: textTheme.bodyMedium?.copyWith(color: readOnly ? AppColors.slate : AppColors.ink),
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: textTheme.bodyMedium?.copyWith(color: AppColors.faint),
-              filled: true,
-              fillColor: readOnly ? const Color(0xFFF8F9FB) : AppColors.surface,
-              suffixIcon: suffixIcon,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
-              enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.line), borderRadius: BorderRadius.circular(6)),
-              focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: readOnly ? AppColors.line : AppColors.navy2, width: readOnly ? 1 : 2), borderRadius: BorderRadius.circular(6)),
-            ),
+        TextField(
+          controller: controller,
+          readOnly: readOnly,
+          keyboardType: keyboardType,
+          onChanged: onChanged,
+          style: textTheme.bodyMedium?.copyWith(color: readOnly ? AppColors.slate : AppColors.ink),
+          decoration: InputDecoration(
+            hintText: hintText,
+            errorText: errorText,
+            hintStyle: textTheme.bodyMedium?.copyWith(color: AppColors.faint),
+            filled: true,
+            fillColor: readOnly ? const Color(0xFFF8F9FB) : AppColors.surface,
+            suffixIcon: suffixIcon,
+            isDense: true, 
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+            enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.line), borderRadius: BorderRadius.circular(6)),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: readOnly ? AppColors.line : AppColors.navy2, width: readOnly ? 1 : 2), borderRadius: BorderRadius.circular(6)),
+            errorBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.red), borderRadius: BorderRadius.circular(6)),
+            focusedErrorBorder: OutlineInputBorder(borderSide: const BorderSide(color: AppColors.red, width: 2), borderRadius: BorderRadius.circular(6)),
           ),
         ),
-        if (helperText != null) ...[
+        if (helperText != null && errorText == null) ...[
           const SizedBox(height: 4),
           Text(helperText!, style: textTheme.labelSmall?.copyWith(color: AppColors.faint)),
         ]

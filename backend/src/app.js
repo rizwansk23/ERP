@@ -9,6 +9,7 @@ import { errorHandler } from './middleware/error.middleware.js';
 import staffRoutes from './modules/staff/staff.routes.js';
 import activityLogRoutes from './modules/activity-logs/activity.routes.js';
 import workRoutes from './modules/works/work.routes.js';
+import customerIntakeRoutes from './modules/customer-intake/customer_intake.routes.js';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/works', workRoutes);
 
 app.use('/api/staff', staffRoutes);
 app.use('/api/activity-logs', activityLogRoutes);
+app.use('/api/customer-intake', customerIntakeRoutes);
 app.use(errorHandler);
 
 export default app;

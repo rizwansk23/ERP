@@ -1,0 +1,14 @@
+// ============================================================================
+// 10. ACK_COUNTERS
+// One row per year. Used to atomically generate acknowledgement numbers
+// in the format ACK-<year>-<seq> (e.g. ACK-2026-1, ACK-2026-2, ...).
+// Resets on Jan 1 because each year gets its own row.
+// ============================================================================
+
+model AckCounter {
+  id      Int    @id @default(autoincrement())
+  year    Int    @unique
+  lastSeq Int    @default(0) @map("last_seq")
+
+  @@map("ack_counters")
+}
