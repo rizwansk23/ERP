@@ -51,7 +51,7 @@
  *                 type: object
  *                 properties:
  *                   Id:
- *                     type: string
+ *                     type: integer
  *                   Payment_method:
  *                     type: string
  *                   Payment_status:
