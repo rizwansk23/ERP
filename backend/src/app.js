@@ -33,6 +33,8 @@ app.use('/api/activity-logs', activityLogRoutes);
 
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/customer-intake', customerIntakeRoutes);
+app.use('/api/services', serviceRoutes);
+// Deprecated singular alias — kept for backwards compatibility.
 app.use('/api/service', serviceRoutes);
 
 app.use(errorHandler);
